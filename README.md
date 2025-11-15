@@ -1,3 +1,6 @@
+## Launch in Colab
+
+[![Open in Colab](https://raw.githubusercontent.com/citronlegacy/kohya-colab/main/assets/colab-badge.svg)](https://colab.research.google.com/github/citronlegacy/jelly_scraper/blob/main/citron_gelbooru_scraper_example.ipynb)
 # Gelbooru Image & Tag Scraper
 
 Python library to search Gelbooru using a query string, authenticate via API key/user ID, and download images plus tags for each result.
