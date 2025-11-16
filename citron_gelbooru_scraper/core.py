@@ -18,7 +18,7 @@ from citron_gelbooru_scraper.utils import (
     ScraperError,
     AuthenticationError
 )
-
+from citron_gelbooru_scraper.utils import SAFE_SOLO_QUERY, SORT_SCORE_QUERY
 
 GELBOORU_API_BASE = "https://gelbooru.com/index.php"
 DEFAULT_LIMIT = 100  # Hardcoded by Gelbooru API
@@ -229,3 +229,82 @@ def jelly_download(
     )
     
     return summary
+
+
+def get_character_tags(
+    character_name: str,
+    api_key: str,
+    user_id: str,
+    max_images: int = 100
+) -> Dict[str, Any]:
+    """
+    Extracts character tags (eye, hair, other) from Gelbooru for a given character.
+    """
+    purge_tags = set([
+        "open_mouth", "blush", "closed_mouth", "full_body", "cowboy_shot", "holding", "sitting", "upper_body",
+        "simple_background", "looking_at_viewer", "black_background", "smile", "closed_eyes", "standing", "artist_name", "absurdres", "white_background"
+    ])
+    special_hair_tags = set(["ponytail", "twintails", "braid", "ahoge", "two side up"])
+
+    # Search for character images
+
+    query = f"{character_name} {SAFE_SOLO_QUERY} {SORT_SCORE_QUERY}"
+    params = build_query_params(query, api_key, user_id, limit=min(max_images, DEFAULT_LIMIT))
+    url = format_url(GELBOORU_API_BASE, params)
+    print(f"Fetching character tags with URL: {url}")
+    try:
+        data = ImageDownloader(".").get_json(url)
+    except Exception as e:
+        raise ScraperError(f"Failed to fetch character tags: {e}")
+
+    posts = data.get("post", [])
+    all_tags = []
+    for post in posts[:max_images]:
+        tag_str = post.get("tags", "")
+        tags = tag_str.split()
+        all_tags.extend(tags)
+
+    # Remove purge tags
+    filtered_tags = [t for t in all_tags if t.lower() not in purge_tags]
+    # Only consider the top 50 tags
+    from citron_gelbooru_scraper.utils import get_top_tags
+    top_tags = get_top_tags(filtered_tags, top_n=50)
+
+    top_tags = [t.replace("_", " ") for t in top_tags]
+    eye_tags = [t for t in top_tags if "eye" in t.lower() or "eyes" in t.lower()]
+    hair_tags = [t for t in top_tags if "hair" in t.lower() or t.lower() in special_hair_tags]
+    other_tags = [t for t in top_tags if t not in eye_tags and t not in hair_tags]
+
+    character_tags = {
+        "name": character_name,
+        "eye": sorted(eye_tags),
+        "hair": sorted(hair_tags),
+        "other": sorted(other_tags)
+    }
+    return {"character_tags": character_tags}
+
+
+def get_query_result_count(
+    query: str,
+    api_key: str,
+    user_id: str,
+    limit: int = 100
+) -> int:
+    """
+    Returns the number of results for a given Gelbooru search query.
+    Args:
+        query: Gelbooru search query (tags separated by spaces)
+        api_key: Your Gelbooru API key
+        user_id: Your Gelbooru user ID
+        limit: Number of results per page (default: 100)
+    Returns:
+        Number of results found for the query
+    """
+    params = build_query_params(query, api_key, user_id, limit=limit)
+    url = format_url(GELBOORU_API_BASE, params)
+    try:
+        data = ImageDownloader(".").get_json(url)
+    except Exception as e:
+        raise ScraperError(f"Failed to fetch result count: {e}")
+    attributes = data.get("@attributes", {})
+    return int(attributes.get("count", 0))

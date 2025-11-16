@@ -1,4 +1,4 @@
-## Launch in Colab
+## Launch Downloader in Colab
 
 [![Open in Colab](https://raw.githubusercontent.com/citronlegacy/kohya-colab/main/assets/colab-badge.svg)](https://colab.research.google.com/github/citronlegacy/citron_gelbooru_scraper/blob/main/citron_gelbooru_scraper_example.ipynb)
 # Gelbooru Image & Tag Scraper
@@ -90,10 +90,10 @@ tests/
   test_tags.py      # Tag processing tests
 ```
 
+
 ## API Reference
 
 ### `jelly_download(query, api_key, user_id, output_dir, max_images=100)`
-
 Main function to search and download images from Gelbooru.
 
 **Parameters:**
@@ -105,6 +105,56 @@ Main function to search and download images from Gelbooru.
 
 **Returns:**
 - `dict`: Summary with downloaded count and any errors
+
+
+### `get_query_result_count(query, api_key, user_id, limit=100)`
+Returns the number of results for a given Gelbooru search query.
+
+**Parameters:**
+- `query` (str): Gelbooru search query with tags
+- `api_key` (str): Your Gelbooru API key
+- `user_id` (str): Your Gelbooru user ID
+- `limit` (int, optional): Number of results per page (default: 100)
+
+**Returns:**
+- `int`: Number of results found for the query
+
+**Example code:**
+```python
+from citron_gelbooru_scraper.core import get_query_result_count
+count = get_query_result_count("catgirl", api_key, user_id)
+print(f"Result count for 'catgirl': {count}")
+```
+
+
+### `get_character_tags(character_name, api_key, user_id, max_images=100)`
+Extracts character tags (eye, hair, other) for a given character. It is hardcoded to only consider results for "solo rating:general sort:score" to avoid confusing tags in the results.
+
+**Parameters:**
+- `character_name` (str): Name of the character to search for
+- `api_key` (str): Your Gelbooru API key
+- `user_id` (str): Your Gelbooru user ID
+- `max_images` (int, optional): Maximum number of images to analyze (default: 100)
+
+**Returns:**
+- `dict`: Dictionary containing structured character tags:
+  - `character_tags` (dict):
+    - `name` (str): Character name
+    - `eye` (list): List of tags with the word "eye" in it
+    - `hair` (list): List of tags with the word "hair" in it or specifically hardcoded hair tags: "ponytail", "twintails",    "braid", "ahoge", "two side up"
+    - `other` (list): List of other top tags
+
+**Example code:**
+```python
+from citron_gelbooru_scraper.core import get_character_tags
+result = get_character_tags("shantae", api_key, user_id, max_images=50)
+print(f"Character tags for 'shantae': {result}")
+```
+
+Example output:
+```bash
+Character tags for 'shantae': {'character_tags': {'name': 'shantae', 'eye': ['blue eyes'], 'hair': ['big hair', 'long hair', 'ponytail', 'purple hair', 'very long hair'], 'other': ['1girl', 'bandeau', 'bare shoulders', 'bracelet', 'bracer', ...]}}
+```
 
 ## Security
 

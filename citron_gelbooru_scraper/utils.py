@@ -1,3 +1,27 @@
+from collections import Counter
+import os
+
+SAFE_SOLO_QUERY = "rating:general solo"
+SORT_SCORE_QUERY = "sort:score"
+
+def get_top_tags(
+    tags: list,
+    top_n: int = 50
+) -> list:
+    """
+    Returns the top N tags from a list of tags.
+    Args:
+        tags: List of tag strings
+        top_n: Number of top tags to return
+    Returns:
+        List of top N tags
+    """
+    tags = [t.strip() for t in tags]
+    tag_counts = Counter(tags)
+    top_tags = tag_counts.most_common(top_n)
+    return [tag for tag, _ in top_tags]
+
+
 """
 Utility functions for the scraper.
 
