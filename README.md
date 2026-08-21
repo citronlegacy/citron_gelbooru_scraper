@@ -1,6 +1,13 @@
 ## Launch Downloader in Colab
 
 [![Open in Colab](https://raw.githubusercontent.com/citronlegacy/kohya-colab/main/assets/colab-badge.svg)](https://colab.research.google.com/github/citronlegacy/citron_gelbooru_scraper/blob/main/citron_gelbooru_scraper_example.ipynb)
+
+## Launch Gelbooru to Hugging Face Dataset Maker in Colab
+
+[![Open in Colab](https://raw.githubusercontent.com/citronlegacy/kohya-colab/main/assets/colab-badge.svg)](https://colab.research.google.com/github/citronlegacy/citron_gelbooru_scraper/blob/main/gelbooru_to_huggingface.ipynb)
+
+Scrapes images and tags from Gelbooru, lets you curate/clean the tags, zips the result, and (optionally) uploads the finished dataset straight to a Hugging Face dataset repo. Credentials (Gelbooru API key/user ID and Hugging Face token) are read from Colab Secrets rather than typed into the notebook. Rate limited by default — please don't abuse Gelbooru.
+
 # Gelbooru Image & Tag Scraper
 
 Python library to search Gelbooru using a query string, authenticate via API key/user ID, and download images plus tags for each result.
