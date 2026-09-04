@@ -4,8 +4,10 @@
 
 ## Launch Dataset to Hugging Face Uploader in Colab
 
+Open Main Branch in Colab
 [![Open in Colab](https://raw.githubusercontent.com/citronlegacy/kohya-colab/main/assets/colab-badge.svg)](https://colab.research.google.com/github/citronlegacy/citron_gelbooru_scraper/blob/main/dataset_to_huggingface.ipynb)
 
+Open Dev Branch in Colab
 [![Open Dev Branch in Colab](https://raw.githubusercontent.com/citronlegacy/kohya-colab/main/assets/colab-badge.svg)](https://colab.research.google.com/github/citronlegacy/citron_gelbooru_scraper/blob/dev/dataset_to_huggingface.ipynb)
 
 Scrapes images and tags from Gelbooru, lets you curate/clean the tags, zips the result, and (optionally) uploads the finished dataset straight to a Hugging Face dataset repo. Credentials (Gelbooru API key/user ID and Hugging Face token) are read from Colab Secrets rather than typed into the notebook. Rate limited by default — please don't abuse Gelbooru.
