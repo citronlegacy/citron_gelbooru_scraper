@@ -10,6 +10,8 @@
 
 ## Launch Animated Dataset to Hugging Face Uploader in Colab
 
+[![Open in Colab](https://raw.githubusercontent.com/citronlegacy/kohya-colab/main/assets/colab-badge.svg)](https://colab.research.google.com/github/citronlegacy/citron_gelbooru_scraper/blob/main/animated_dataset_to_huggingface.ipynb)
+
 [![Open Dev Branch in Colab](https://raw.githubusercontent.com/citronlegacy/kohya-colab/main/assets/colab-badge.svg)](https://colab.research.google.com/github/citronlegacy/citron_gelbooru_scraper/blob/dev/animated_dataset_to_huggingface.ipynb)
 
 
